@@ -54,11 +54,7 @@ logger = logging.getLogger("scheduler-bot")
 # Config & Secrets
 # ---------------------------------------------------------------------------
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "").strip()
-ALLOWED_USERS = {
-    int(uid.strip())
-    for uid in os.environ.get("ALLOWED_USERS", "").split(",")
-    if uid.strip()
-}
+OWNER_ID = int(os.environ.get("OWNER_ID", "0") or "0")
 CHANNEL_ID = os.environ.get("CHANNEL_ID", "").strip()
 
 CONFIG_FILE = "config.json"
@@ -204,15 +200,12 @@ storage = Storage(STORAGE_FILE)
 def owner_only(func):
     """Decorator: restrict handler to OWNER_ID only."""
 
-   async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
     user = update.effective_user
 
-    if not user or user.id not in ALLOWED_USERS:
-        logger.warning(
-            "Rejected unauthorized user: %s",
-            user.id if user else "unknown"
-        )
-        return ConversationHandler.END if False else None
+    if not user or user.id != OWNER_ID:
+        logger.warning("Rejected non-owner user: %s", user.id if user else "unknown")
+        return
 
     return await func(update, context, *args, **kwargs)
 
