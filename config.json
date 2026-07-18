@@ -1,0 +1,17 @@
+{
+  "timezone": "Asia/Kolkata",
+  "storage_file": "posts.json",
+  "max_posts_per_schedule": 100,
+  "default_intervals": {
+    "seconds": [30, 60, 120],
+    "minutes": [1, 5, 15, 30, 60],
+    "hours": [1, 2, 6, 12, 24],
+    "days": [1, 2, 7, 30]
+  },
+  "limits": {
+    "max_caption_length": 1024,
+    "max_button_text_length": 64,
+    "max_schedules": 50
+  }
+}
+
